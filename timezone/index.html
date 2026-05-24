@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free Time Zone Converter - Convert time between USA, UK, Canada, Australia and 100+ cities instantly. World clock and meeting planner.">
+<meta name="keywords" content="time zone converter, world clock, time difference, EST to GMT, convert time zones, meeting time planner">
+<title>Time Zone Converter - World Clock | Free Online Tool</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+  .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+  header { text-align: center; padding: 30px 0 20px; }
+  header h1 { font-size: 32px; color: #1a1a1a; margin-bottom: 8px; }
+  header p { font-size: 16px; color: #666; }
+  .ad-box { background: #e9e9e9; border: 1px dashed #bbb; text-align: center;
+    padding: 15px; font-size: 12px; color: #999; margin: 15px 0; border-radius: 8px; }
+  .card { background: #fff; border-radius: 12px; padding: 25px;
+    margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .card h2 { font-size: 20px; margin-bottom: 20px; color: #1a1a1a; }
+  label { font-size: 14px; color: #555; display: block; margin-bottom: 6px; }
+  select, input[type=datetime-local] { width: 100%; padding: 12px;
+    border: 1px solid #ddd; border-radius: 8px; font-size: 15px;
+    color: #333; background: #fff; margin-bottom: 16px; }
+  .from-to { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 10px;
+    align-items: center; margin-bottom: 16px; }
+  .swap-btn { background: #f0f0f0; border: none; border-radius: 50%;
+    width: 40px; height: 40px; cursor: pointer; font-size: 20px;
+    display: flex; align-items: center; justify-content: center; margin-top: 22px; }
+  .swap-btn:hover { background: #16a37f; color: #fff; }
+  .btn { width: 100%; padding: 14px; background: #16a37f; color: #fff;
+    border: none; border-radius: 8px; font-size: 17px; font-weight: bold;
+    cursor: pointer; }
+  .btn:hover { background: #128a6a; }
+  .result-box { display: none; margin-top: 20px; }
+  .result-main { background: #f0faf6; border-radius: 10px; padding: 20px;
+    text-align: center; margin-bottom: 16px; }
+  .result-time { font-size: 42px; font-weight: bold; color: #16a37f; }
+  .result-date { font-size: 16px; color: #666; margin-top: 4px; }
+  .result-zone { font-size: 14px; color: #999; margin-top: 4px; }
+  .world-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .world-card { background: #f8f8f8; border-radius: 8px; padding: 14px;
+    display: flex; justify-content: space-between; align-items: center; }
+  .world-city { font-size: 14px; color: #555; }
+  .world-flag { font-size: 18px; margin-right: 6px; }
+  .world-time { font-size: 16px; font-weight: bold; color: #1a1a1a; }
+  .world-date { font-size: 11px; color: #999; }
+  .diff-badge { background: #fff3e0; color: #e65100; font-size: 12px;
+    padding: 3px 8px; border-radius: 20px; margin-top: 4px; display: inline-block; }
+  .info-text { font-size: 14px; color: #666; line-height: 1.8; }
+  footer { text-align: center; padding: 20px; font-size: 13px; color: #999; }
+  .back-link { display: inline-block; margin-bottom: 10px;
+    color: #16a37f; text-decoration: none; font-size: 14px; }
+  .live-clock { text-align: center; background: #1a1a1a; color: #16a37f;
+    border-radius: 10px; padding: 16px; margin-bottom: 16px; font-size: 28px;
+    font-family: monospace; font-weight: bold; letter-spacing: 2px; }
+  .live-label { font-size: 12px; color: #999; margin-top: 4px;
+    font-family: Arial; letter-spacing: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a href="/" class="back-link">← Back to All Tools</a>
+
+  <header>
+    <h1>Time Zone Converter</h1>
+    <p>Convert time between any two cities or time zones instantly</p>
+  </header>
+
+  <div class="ad-box"><!-- Google AdSense -->Advertisement</div>
+
+  <div class="card">
+    <div class="live-clock" id="liveClock">--:--:--<div class="live-label">Your Local Time</div></div>
+
+    <h2>Convert Time Zone</h2>
+
+    <label>Date & Time to Convert</label>
+    <input type="datetime-local" id="inputTime">
+
+    <div class="from-to">
+      <div>
+        <label>From Time Zone</label>
+        <select id="fromZone"></select>
+      </div>
+      <button class="swap-btn" onclick="swapZones()" title="Swap">⇄</button>
+      <div>
+        <label>To Time Zone</label>
+        <select id="toZone"></select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="convertTime()">Convert Time</button>
+
+    <div class="result-box" id="resultBox">
+      <div class="result-main">
+        <div style="font-size:14px;color:#666;margin-bottom:6px">Converted Time</div>
+        <div class="result-time" id="resTime">--:--</div>
+        <div class="result-date" id="resDate"></div>
+        <div class="result-zone" id="resZone"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-box"><!-- Google AdSense -->Advertisement</div>
+
+  <div class="card">
+    <h2>World Clock — Major Cities</h2>
+    <div class="world-grid" id="worldGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Common Time Zone Conversions</h2>
+    <p class="info-text">
+      <strong>EST to GMT:</strong> Eastern Standard Time is 5 hours behind GMT.<br><br>
+      <strong>PST to EST:</strong> Pacific Standard Time is 3 hours behind Eastern Time.<br><br>
+      <strong>GMT to IST:</strong> Indian Standard Time is 5 hours 30 minutes ahead of GMT.<br><br>
+      <strong>EST to CST:</strong> Central Standard Time is 1 hour behind Eastern Time.
+    </p>
+  </div>
+
+  <div class="ad-box"><!-- Google AdSense -->Advertisement</div>
+
+  <footer><p>&copy; 2026 Time Zone Converter | Free Online Tools</p></footer>
+</div>
+
+<script>
+const zones = [
+  { label: 'New York (EST/EDT)',      tz: 'America/New_York' },
+  { label: 'Los Angeles (PST/PDT)',   tz: 'America/Los_Angeles' },
+  { label: 'Chicago (CST/CDT)',       tz: 'America/Chicago' },
+  { label: 'Denver (MST/MDT)',        tz: 'America/Denver' },
+  { label: 'London (GMT/BST)',        tz: 'Europe/London' },
+  { label: 'Paris (CET/CEST)',        tz: 'Europe/Paris' },
+  { label: 'Berlin (CET/CEST)',       tz: 'Europe/Berlin' },
+  { label: 'Dubai (GST)',             tz: 'Asia/Dubai' },
+  { label: 'Toronto (EST/EDT)',       tz: 'America/Toronto' },
+  { label: 'Vancouver (PST/PDT)',     tz: 'America/Vancouver' },
+  { label: 'Sydney (AEST/AEDT)',      tz: 'Australia/Sydney' },
+  { label: 'Tokyo (JST)',             tz: 'Asia/Tokyo' },
+  { label: 'Singapore (SGT)',         tz: 'Asia/Singapore' },
+  { label: 'Mumbai (IST)',            tz: 'Asia/Kolkata' },
+  { label: 'Karachi (PKT)',           tz: 'Asia/Karachi' },
+  { label: 'Nairobi (EAT)',           tz: 'Africa/Nairobi' },
+  { label: 'São Paulo (BRT)',         tz: 'America/Sao_Paulo' },
+  { label: 'Mexico City (CST/CDT)',   tz: 'America/Mexico_City' },
+];
+
+const worldCities = [
+  { city: 'New York',    flag: '🇺🇸', tz: 'America/New_York' },
+  { city: 'London',      flag: '🇬🇧', tz: 'Europe/London' },
+  { city: 'Toronto',     flag: '🇨🇦', tz: 'America/Toronto' },
+  { city: 'Sydney',      flag: '🇦🇺', tz: 'Australia/Sydney' },
+  { city: 'Dubai',       flag: '🇦🇪', tz: 'Asia/Dubai' },
+  { city: 'Tokyo',       flag: '🇯🇵', tz: 'Asia/Tokyo' },
+  { city: 'Paris',       flag: '🇫🇷', tz: 'Europe/Paris' },
+  { city: 'Los Angeles', flag: '🇺🇸', tz: 'America/Los_Angeles' },
+];
+
+const fromSel = document.getElementById('fromZone');
+const toSel   = document.getElementById('toZone');
+zones.forEach((z, i) => {
+  const o1 = new Option(z.label, z.tz);
+  const o2 = new Option(z.label, z.tz);
+  fromSel.add(o1); toSel.add(o2);
+});
+fromSel.value = 'America/New_York';
+toSel.value   = 'Europe/London';
+
+const now = new Date();
+const pad = n => String(n).padStart(2,'0');
+document.getElementById('inputTime').value =
+  `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+function swapZones() {
+  const tmp = fromSel.value;
+  fromSel.value = toSel.value;
+  toSel.value = tmp;
+}
+
+function convertTime() {
+  const inputVal = document.getElementById('inputTime').value;
+  if (!inputVal) { alert('Please select a date and time!'); return; }
+  const fromTz = fromSel.value;
+  const toTz   = toSel.value;
+  const localDate = new Date(inputVal);
+
+  const fromOffset = getOffset(localDate, fromTz);
+  const toOffset   = getOffset(localDate, toTz);
+  const diffMs     = (toOffset - fromOffset) * 60000;
+  const converted  = new Date(localDate.getTime() + diffMs);
+
+  const timeStr = converted.toLocaleTimeString('en-US',
+    { hour: '2-digit', minute: '2-digit', hour12: true });
+  const dateStr = converted.toLocaleDateString('en-US',
+    { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  document.getElementById('resTime').textContent = timeStr;
+  document.getElementById('resDate').textContent = dateStr;
+  document.getElementById('resZone').textContent = toSel.options[toSel.selectedIndex].text;
+  document.getElementById('resultBox').style.display = 'block';
+}
+
+function getOffset(date, tz) {
+  const s = date.toLocaleString('en-US', { timeZone: tz, hour: 'numeric',
+    minute: 'numeric', hour12: false });
+  const [h, m] = s.split(':').map(Number);
+  const local = date.getHours() * 60 + date.getMinutes();
+  let diff = (h * 60 + m) - local;
+  if (diff > 720) diff -= 1440;
+  if (diff < -720) diff += 1440;
+  return diff;
+}
+
+function updateWorldClock() {
+  const grid = document.getElementById('worldGrid');
+  const now = new Date();
+  grid.innerHTML = worldCities.map(c => {
+    const t = now.toLocaleTimeString('en-US',
+      { timeZone: c.tz, hour: '2-digit', minute: '2-digit', hour12: true });
+    const d = now.toLocaleDateString('en-US',
+      { timeZone: c.tz, month: 'short', day: 'numeric' });
+    return `<div class="world-card">
+      <div><span class="world-flag">${c.flag}</span><span class="world-city">${c.city}</span></div>
+      <div style="text-align:right">
+        <div class="world-time">${t}</div>
+        <div class="world-date">${d}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const lc = document.getElementById('liveClock');
+  lc.innerHTML = now.toLocaleTimeString('en-US') +
+    '<div class="live-label">Your Local Time — ' +
+    now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + '</div>';
+}
+
+updateWorldClock();
+setInterval(updateWorldClock, 1000);
+</script>
+</body>
+</html>
